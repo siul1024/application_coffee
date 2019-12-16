@@ -21,7 +21,7 @@ class SaleDao(Dao):
 
     def update_table(self, code=None, price=None, salecnt=None, marginrate=None, no=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "sale"))
-        args = (code, price, salecnt, marginrate)
+        args = (code, price, salecnt, marginrate, no)
         try:
             super().do_query(query=update_sql, kargs=args)
             return True
@@ -42,7 +42,7 @@ class SaleDao(Dao):
         try:
             conn = self.connection_pool.get_connection()
             cursor = conn.cursor()
-            cursor.execute(select_sql) if no is None else cursor.excute(select_sql_where, (no,))
+            cursor.execute(select_sql) if no is None else cursor.execute(select_sql_where, (no,))
             res = []
             [res.append(row) for row in self.iter_row(cursor, 5)]
             return res

@@ -1,8 +1,6 @@
 import inspect
 from abc import ABCMeta, abstractmethod
-
 from mysql.connector import Error
-
 from db_connection.connection_pool import ConnectionPool
 
 
@@ -31,10 +29,10 @@ class Dao(metaclass=ABCMeta):
         try:
             conn = self.connection_pool.get_connection()
             cursor = conn.cursor()
-            if kwargs['p_args'] is not None:
-                cursor.excute(kwargs['query'], kwargs['kargs'])
+            if kwargs['kargs'] is not None:
+                cursor.execute(kwargs['query'], kwargs['kargs'])
             else:
-                cursor.excute(kwargs['query'])
+                cursor.execute(kwargs['query'])
             conn.commit()
         except Error as e:
             print(e)

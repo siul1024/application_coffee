@@ -2,10 +2,10 @@ import inspect
 from mysql.connector import Error
 from dao.abs_dao import Dao
 
-insert_sql="INSERT INTO product VALUES(%s, %s)"
-update_sql="UPDATE product SET name=%s WHERE code=%s"
-delete_sql="DELETE FROM product WHERE n=%s"
-select_sql="SELECT code, name FROM product"
+insert_sql = "INSERT INTO product VALUES(%s, %s)"
+update_sql = "UPDATE product SET name=%s WHERE code=%s"
+delete_sql = "DELETE FROM product WHERE code=%s"
+select_sql = "SELECT code, name FROM product"
 select_sql_where = select_sql + " WHERE code=%s"
 
 

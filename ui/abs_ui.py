@@ -33,25 +33,18 @@ class MyUi(QWidget):
     def select_service(self, **kwargs):
         raise NotImplementedError("Subclass must implement abstract method")
 
-    # @abstractmethod
-    # def add_item(self, **kwargs):
-    #     raise NotImplementedError("Subclass must implement abstract method")
-
     @abstractmethod
     def create_item(self, **kwargs):
         raise NotImplementedError("Subclass must implement abstract method. return item")
 
-    # @abstractmethod
-    # def update_item(self, **kwargs):
-    #     raise NotImplementedError("Subclass must implement abstract method")
-
     @abstractmethod
-    def get_item_form_le(self, **kwargs):
-        raise NotImplementedError("Subclass must implement abstract method")
-
     def set_text_form_table(self, **kwargs):
         raise NotImplementedError("Subclass must implement abstract method")
 
     @abstractmethod
     def load_data(self, **kwargs):
+        raise NotImplementedError("Subclass must implement abstract method")
+
+    @abstractmethod
+    def init_item(self, **kwargs):
         raise NotImplementedError("Subclass must implement abstract method")
