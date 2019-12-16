@@ -189,6 +189,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>le_no</tabstop>
+  <tabstop>le_code</tabstop>
+  <tabstop>le_price</tabstop>
+  <tabstop>le_salecnt</tabstop>
+  <tabstop>le_marginrate</tabstop>
+  <tabstop>btn_init</tabstop>
+  <tabstop>btn_apply</tabstop>
+  <tabstop>rb_select</tabstop>
+  <tabstop>rb_insert</tabstop>
+  <tabstop>rb_update</tabstop>
+  <tabstop>rb_delete</tabstop>
+  <tabstop>tbl_widget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

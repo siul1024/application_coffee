@@ -150,6 +150,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>le_code</tabstop>
+  <tabstop>le_name</tabstop>
+  <tabstop>btn_init</tabstop>
+  <tabstop>btn_apply</tabstop>
+  <tabstop>rb_select</tabstop>
+  <tabstop>rb_insert</tabstop>
+  <tabstop>rb_update</tabstop>
+  <tabstop>rb_delete</tabstop>
+  <tabstop>tbl_widget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

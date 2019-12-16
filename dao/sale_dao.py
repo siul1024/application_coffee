@@ -2,11 +2,11 @@ import inspect
 from mysql.connector import Error
 from dao.abs_dao import Dao
 
-insert_sql="INSERT INTO sale VALUES(NULL, %s, %s, %s, %s)"
-update_sql="UPDATE sale SET code=%s, price=%s, saleCnt=%s, marginRate=%s WHERE no=%s"
-delete_sql="DELETE FROM sale WHERE no=%s"
-select_sql="SELECT no, code, price, saleCnt, marginRate FROM sale"
-select_sql_where = select_sql +" WHERE no=%s"
+insert_sql = "INSERT INTO sale VALUES(NULL, %s, %s, %s, %s)"
+update_sql = "UPDATE sale SET code=%s, price=%s, saleCnt=%s, marginRate=%s WHERE no=%s"
+delete_sql = "DELETE FROM sale WHERE no=%s"
+select_sql = "SELECT no, code, price, saleCnt, marginRate FROM sale"
+select_sql_where = select_sql + " WHERE no=%s"
 
 
 class SaleDao(Dao):
