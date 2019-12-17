@@ -22,6 +22,7 @@ class UiProduct(MyUi):
         self.ui.rb_insert.clicked.connect(self.insert_service)
         self.table.itemSelectionChanged.connect(self.set_text_form_table)
         self.ui.btn_init.clicked.connect(self.init_item)
+        self.load_data()
 
     def delete_service(self):
         self.ui.le_code.setEnabled(True)

@@ -22,6 +22,7 @@ class UiSale(MyUi):
         self.ui.rb_insert.clicked.connect(self.insert_service)
         self.table.itemSelectionChanged.connect(self.set_text_form_table)
         self.ui.btn_init.clicked.connect(self.init_item)
+        self.load_data()
 
     def delete_service(self):
         self.ui.le_no.setEnabled(True)
@@ -94,7 +95,6 @@ class UiSale(MyUi):
                 res = self.TB.select_table(le_no.text())
             else:
                 res = self.TB.select_table()
-        print(res)
         self.table.setRowCount(0)
         for idx, (no, code, price, salecnt, marginrate) in enumerate(res):
             item_no, item_code, item_price, item_salecnt, item_marginrate \

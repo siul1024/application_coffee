@@ -17,6 +17,7 @@ class UiSaleDetail(MyUi):
         self.ui.btn_default.clicked.connect(self.select_service)
         self.ui.btn_order_sp.clicked.connect(lambda stat, x=True: self.tablejoin_service(stat, order=x))
         self.ui.btn_order_mp.clicked.connect(lambda stat, x=False: self.tablejoin_service(stat, order=x))
+        self.select_service()
 
     def select_service(self):
         self.ui.tbl_widget.setColumnCount(5)

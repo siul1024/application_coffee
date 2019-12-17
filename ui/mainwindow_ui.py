@@ -23,3 +23,18 @@ class UiMainWindow(QMainWindow):
 
     def display(self, i):
         self.ui.stk_widget.setCurrentIndex(i)
+        self.buttonslot(i)
+
+    def buttonslot(self, i):
+        if i == 0:
+            self.ui.btn_product.setEnabled(False)
+            self.ui.btn_sale.setEnabled(True)
+            self.ui.btn_saledetail.setEnabled(True)
+        elif i == 1:
+            self.ui.btn_product.setEnabled(True)
+            self.ui.btn_sale.setEnabled(False)
+            self.ui.btn_saledetail.setEnabled(True)
+        else:
+            self.ui.btn_product.setEnabled(True)
+            self.ui.btn_sale.setEnabled(True)
+            self.ui.btn_saledetail.setEnabled(False)
