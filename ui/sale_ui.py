@@ -15,7 +15,7 @@ class UiSale(MyUi):
         self.ui.setWindowTitle("Sale Management")
         self.ui.tbl_widget.setColumnCount(5)
         self.table = abs_ui.create_table(table=self.ui.tbl_widget, data=['no', 'code', 'price', 'saleCnt', 'marginRate'])
-        self.ui.show()
+        # self.ui.show()
         self.ui.rb_select.clicked.connect(self.select_service)
         self.ui.rb_delete.clicked.connect(self.delete_service)
         self.ui.rb_update.clicked.connect(self.update_service)

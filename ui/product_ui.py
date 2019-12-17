@@ -15,7 +15,7 @@ class UiProduct(MyUi):
         self.ui.setWindowTitle("Product Management")
         self.ui.tbl_widget.setColumnCount(2)
         self.table = abs_ui.create_table(table=self.ui.tbl_widget, data=['code', 'name'])
-        self.ui.show()
+        # self.ui.show()
         self.ui.rb_select.clicked.connect(self.select_service)
         self.ui.rb_delete.clicked.connect(self.delete_service)
         self.ui.rb_update.clicked.connect(self.update_service)
