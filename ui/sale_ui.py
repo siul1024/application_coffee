@@ -14,7 +14,7 @@ class UiSale(MyUi):
         self.ui = uic.loadUi("ui/sale.ui")
         self.ui.setWindowTitle("Sale Management")
         self.ui.tbl_widget.setColumnCount(5)
-        self.table = abs_ui.create_table(table=self.ui.tbl_widget, data=['no', 'code', 'price', 'saleCnt', 'marginRate'])
+        self.table = abs_ui.create_table(table=self.ui.tbl_widget, data=['no', 'code', 'price(￦)', 'saleCnt', 'marginRate(%)'])
         # self.ui.show()
         self.ui.rb_select.clicked.connect(self.select_service)
         self.ui.rb_delete.clicked.connect(self.delete_service)
@@ -62,14 +62,23 @@ class UiSale(MyUi):
     def create_item(self, no, code, price, salecnt, marginrate):
         ino = QTableWidgetItem(no)
         ino.setTextAlignment(Qt.AlignCenter)
+        ino.setData(Qt.DisplayRole, no)
+
         icode = QTableWidgetItem(code)
         icode.setTextAlignment(Qt.AlignCenter)
+        icode.setData(Qt.DisplayRole, code)
+
         iprice = QTableWidgetItem(price)
-        iprice.setTextAlignment(Qt.AlignCenter)
+        iprice.setTextAlignment(Qt.AlignRight)
+        iprice.setData(Qt.DisplayRole, format(int(price), ',d'))
+
         isalecnt = QTableWidgetItem(salecnt)
-        isalecnt.setTextAlignment(Qt.AlignCenter)
+        isalecnt.setTextAlignment(Qt.AlignRight)
+        isalecnt.setData(Qt.DisplayRole, format(int(salecnt), ',d'))
+
         imarginrate = QTableWidgetItem(marginrate)
-        imarginrate.setTextAlignment(Qt.AlignCenter)
+        imarginrate.setTextAlignment(Qt.AlignRight)
+        imarginrate.setData(Qt.DisplayRole, format(int(marginrate), ',d'))
         return ino, icode, iprice, isalecnt, imarginrate
 
     def set_text_form_table(self):
@@ -98,7 +107,7 @@ class UiSale(MyUi):
         self.table.setRowCount(0)
         for idx, (no, code, price, salecnt, marginrate) in enumerate(res):
             item_no, item_code, item_price, item_salecnt, item_marginrate \
-                = self.create_item(str(no), code, str(price), str(salecnt), str(marginrate))
+                = self.create_item(no, code, price, salecnt, marginrate)
             nextIdx = self.table.rowCount()
             self.table.insertRow(nextIdx)
             self.table.setItem(nextIdx, 0, item_no)

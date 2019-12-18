@@ -23,7 +23,7 @@
       </size>
      </property>
      <property name="text">
-      <string>Order by Sale Price</string>
+      <string>Order by Supply Price</string>
      </property>
     </widget>
    </item>
