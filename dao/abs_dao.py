@@ -4,6 +4,10 @@ from mysql.connector import Error
 from db_connection.connection_pool import ConnectionPool
 
 
+class SQLError(Exception):
+    pass
+
+
 class Dao(metaclass=ABCMeta):
     def __init__(self):
         self.connection_pool = ConnectionPool.get_instance()
@@ -34,8 +38,8 @@ class Dao(metaclass=ABCMeta):
             else:
                 cursor.execute(kwargs['query'])
             conn.commit()
-        except Error:
-            raise
+        except Error as e:
+            raise SQLError(e)
         finally:
             cursor.close()
             conn.close()

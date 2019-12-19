@@ -1,7 +1,8 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
+from dao.abs_dao import SQLError
 from dao.sale_dao import SaleDao
 from ui import abs_ui
 from ui.abs_ui import MyUi
@@ -101,24 +102,27 @@ class UiSale(MyUi):
             self.ui.le_marginrate.setText(marginrate)
 
     def load_data(self, stat=None, le_no=None):
-        if le_no is None:
-            res = self.TB.select_table()
-        else:
-            if len(le_no.text()) == 0:
+        try:
+            if le_no is None:
                 res = self.TB.select_table()
             else:
-                res = self.TB.select_table(le_no.text())
-        self.table.setRowCount(0)
-        for idx, (no, code, price, salecnt, marginrate) in enumerate(res):
-            item_no, item_code, item_price, item_salecnt, item_marginrate \
-                = self.create_item(no, code, price, salecnt, marginrate)
-            nextIdx = self.table.rowCount()
-            self.table.insertRow(nextIdx)
-            self.table.setItem(nextIdx, 0, item_no)
-            self.table.setItem(nextIdx, 1, item_code)
-            self.table.setItem(nextIdx, 2, item_price)
-            self.table.setItem(nextIdx, 3, item_salecnt)
-            self.table.setItem(nextIdx, 4, item_marginrate)
+                if len(le_no.text()) == 0:
+                    res = self.TB.select_table()
+                else:
+                    res = self.TB.select_table(le_no.text())
+            self.table.setRowCount(0)
+            for idx, (no, code, price, salecnt, marginrate) in enumerate(res):
+                item_no, item_code, item_price, item_salecnt, item_marginrate \
+                    = self.create_item(no, code, price, salecnt, marginrate)
+                nextIdx = self.table.rowCount()
+                self.table.insertRow(nextIdx)
+                self.table.setItem(nextIdx, 0, item_no)
+                self.table.setItem(nextIdx, 1, item_code)
+                self.table.setItem(nextIdx, 2, item_price)
+                self.table.setItem(nextIdx, 3, item_salecnt)
+                self.table.setItem(nextIdx, 4, item_marginrate)
+        except SQLError as e:
+            QMessageBox().information(self, 'SELECT ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def init_item(self):
         self.ui.le_no.clear()
@@ -129,15 +133,23 @@ class UiSale(MyUi):
         self.table.clearSelection()
 
     def __insert(self):
-        self.TB.insert_table(self.ui.le_code.text(), self.ui.le_price.text(), self.ui.le_salecnt.text(), self.ui.le_marginrate.text())
-        self.load_data()
+        try:
+            self.TB.insert_table(self.ui.le_code.text(), self.ui.le_price.text(), self.ui.le_salecnt.text(), self.ui.le_marginrate.text())
+            self.load_data()
+        except SQLError as e:
+            QMessageBox().information(self, 'INSERT ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def __update(self):
-        self.TB.update_table(self.ui.le_code.text(), self.ui.le_price.text(), self.ui.le_salecnt.text(), self.ui.le_marginrate.text(), self.ui.le_no.text())
-        self.load_data()
+        try:
+            self.TB.update_table(self.ui.le_code.text(), self.ui.le_price.text(), self.ui.le_salecnt.text(), self.ui.le_marginrate.text(), self.ui.le_no.text())
+            self.load_data()
+        except SQLError as e:
+            QMessageBox().information(self, 'UPDATE ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def __delete(self):
-        self.TB.delete_table(self.ui.le_no.text())
-        self.load_data()
-
+        try:
+            self.TB.delete_table(self.ui.le_no.text())
+            self.load_data()
+        except SQLError as e:
+            QMessageBox().information(self, 'DELETE ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 

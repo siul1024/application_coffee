@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 from mysql.connector import Error
 
+from dao.abs_dao import SQLError
 from dao.product_dao import ProductDao
 from ui import abs_ui
 from ui.abs_ui import MyUi
@@ -69,20 +70,23 @@ class UiProduct(MyUi):
             self.ui.le_name.setText(name)
 
     def load_data(self, stat=None, le_code=None):
-        if le_code is None:
-            res = self.TB.select_table()
-        else:
-            if len(le_code.text()) != 0:
-                res = self.TB.select_table(le_code.text())
-            else:
+        try:
+            if le_code is None:
                 res = self.TB.select_table()
-        self.table.setRowCount(0)
-        for idx, (code, name) in enumerate(res):
-            item_code, item_name = self.create_item(code, name)
-            nextIdx = self.table.rowCount()
-            self.table.insertRow(nextIdx)
-            self.table.setItem(nextIdx, 0, item_code)
-            self.table.setItem(nextIdx, 1, item_name)
+            else:
+                if len(le_code.text()) != 0:
+                    res = self.TB.select_table(le_code.text())
+                else:
+                    res = self.TB.select_table()
+            self.table.setRowCount(0)
+            for idx, (code, name) in enumerate(res):
+                item_code, item_name = self.create_item(code, name)
+                nextIdx = self.table.rowCount()
+                self.table.insertRow(nextIdx)
+                self.table.setItem(nextIdx, 0, item_code)
+                self.table.setItem(nextIdx, 1, item_name)
+        except SQLError as e:
+            QMessageBox().information(self, 'SELECT ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def init_item(self):
         self.ui.le_code.clear()
@@ -93,20 +97,20 @@ class UiProduct(MyUi):
         try:
             self.TB.insert_table(self.ui.le_code.text(), self.ui.le_name.text())
             self.load_data()
-        except Error:
-            QMessageBox().information(self, 'INSERT ERROR', str(Error), QMessageBox.Ok)
+        except SQLError as e:
+            QMessageBox().information(self, 'INSERT ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def __update(self):
         try:
             self.TB.update_table(self.ui.le_name.text(), self.ui.le_code.text())
             self.load_data()
-        except Error:
-            QMessageBox().information(self, 'UPDATE ERROR', str(Error), QMessageBox.Ok)
+        except SQLError as e:
+            QMessageBox().information(self, 'UPDATE ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def __delete(self):
         try:
             self.TB.delete_table(self.ui.le_code.text())
             self.load_data()
-        except Error:
-            print(Error)
-            QMessageBox().information(self, 'DELETE ERROR', str(Error), QMessageBox.Ok)
+        except SQLError as e:
+            QMessageBox().information(self, 'DELETE ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
+

@@ -1,6 +1,6 @@
 import inspect
 from mysql.connector import Error
-from dao.abs_dao import Dao
+from dao.abs_dao import Dao, SQLError
 
 insert_sql = "INSERT INTO sale VALUES(NULL, %s, %s, %s, %s)"
 update_sql = "UPDATE sale SET code=%s, price=%s, saleCnt=%s, marginRate=%s WHERE no=%s"
@@ -15,27 +15,24 @@ class SaleDao(Dao):
         args = (no, )
         try:
             super().do_query(query=delete_sql, kargs=args)
-            return True
-        except Error:
-            return False
+        except SQLError as e:
+            raise SQLError(e)
 
     def update_table(self, code=None, price=None, salecnt=None, marginrate=None, no=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "sale"))
         args = (code, price, salecnt, marginrate, no)
         try:
             super().do_query(query=update_sql, kargs=args)
-            return True
-        except Error:
-            return False
+        except SQLError as e:
+            raise SQLError(e)
 
     def insert_table(self, code=None, price=None, salecnt=None, marginrate=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "sale"))
         args = (code, price, salecnt, marginrate)
         try:
             super().do_query(query=insert_sql, kargs=args)
-            return True
-        except Error:
-            return False
+        except SQLError as e:
+            raise SQLError(e)
 
     def select_table(self, no=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "sale"))
@@ -46,8 +43,8 @@ class SaleDao(Dao):
             res = []
             [res.append(row) for row in self.iter_row(cursor, 5)]
             return res
-        except Error:
-            raise Error
+        except Error as e:
+            raise SQLError(e)
         finally:
             cursor.close()
             conn.close()
