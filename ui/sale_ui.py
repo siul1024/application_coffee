@@ -30,6 +30,7 @@ class UiSale(MyUi):
         self.ui.le_price.setEnabled(False)
         self.ui.le_salecnt.setEnabled(False)
         self.ui.le_marginrate.setEnabled(False)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(self.__delete)
         self.load_data()
 
@@ -39,6 +40,7 @@ class UiSale(MyUi):
         self.ui.le_price.setEnabled(True)
         self.ui.le_salecnt.setEnabled(True)
         self.ui.le_marginrate.setEnabled(True)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(self.__update)
         self.load_data()
 
@@ -48,6 +50,7 @@ class UiSale(MyUi):
         self.ui.le_price.setEnabled(True)
         self.ui.le_salecnt.setEnabled(True)
         self.ui.le_marginrate.setEnabled(True)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(self.__insert)
         self.load_data()
 
@@ -57,6 +60,7 @@ class UiSale(MyUi):
         self.ui.le_price.setEnabled(False)
         self.ui.le_salecnt.setEnabled(False)
         self.ui.le_marginrate.setEnabled(False)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(lambda stat, le_no=self.ui.le_no: self.load_data(stat, le_no))
 
     def create_item(self, no, code, price, salecnt, marginrate):
@@ -85,11 +89,11 @@ class UiSale(MyUi):
         selectcheck = self.table.selectedRanges()
         if len(selectcheck) != 0:
             selectIdxs = self.table.selectedIndexes()[0]
-            no = self.table.item(selectIdxs.row(), 0).text()
+            no = self.table.item(selectIdxs.row(), 0).text().replace(',', '')
             code = self.table.item(selectIdxs.row(), 1).text()
-            price = self.table.item(selectIdxs.row(), 2).text()
-            salecnt = self.table.item(selectIdxs.row(), 3).text()
-            marginrate = self.table.item(selectIdxs.row(), 4).text()
+            price = self.table.item(selectIdxs.row(), 2).text().replace(',', '')
+            salecnt = self.table.item(selectIdxs.row(), 3).text().replace(',', '')
+            marginrate = self.table.item(selectIdxs.row(), 4).text().replace(',', '')
             self.ui.le_no.setText(no)
             self.ui.le_code.setText(code)
             self.ui.le_price.setText(price)
@@ -100,10 +104,10 @@ class UiSale(MyUi):
         if le_no is None:
             res = self.TB.select_table()
         else:
-            if len(le_no.text()) != 0:
-                res = self.TB.select_table(le_no.text())
-            else:
+            if len(le_no.text()) == 0:
                 res = self.TB.select_table()
+            else:
+                res = self.TB.select_table(le_no.text())
         self.table.setRowCount(0)
         for idx, (no, code, price, salecnt, marginrate) in enumerate(res):
             item_no, item_code, item_price, item_salecnt, item_marginrate \
@@ -135,3 +139,5 @@ class UiSale(MyUi):
     def __delete(self):
         self.TB.delete_table(self.ui.le_no.text())
         self.load_data()
+
+

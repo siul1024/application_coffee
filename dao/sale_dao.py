@@ -46,8 +46,8 @@ class SaleDao(Dao):
             res = []
             [res.append(row) for row in self.iter_row(cursor, 5)]
             return res
-        except Error as e:
-            print(e)
+        except Error:
+            raise Error
         finally:
             cursor.close()
             conn.close()

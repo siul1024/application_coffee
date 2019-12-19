@@ -48,3 +48,5 @@ class MyUi(QWidget):
     @abstractmethod
     def init_item(self, **kwargs):
         raise NotImplementedError("Subclass must implement abstract method")
+
+

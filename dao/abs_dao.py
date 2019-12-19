@@ -34,9 +34,8 @@ class Dao(metaclass=ABCMeta):
             else:
                 cursor.execute(kwargs['query'])
             conn.commit()
-        except Error as e:
-            print(e)
-            raise e
+        except Error:
+            raise
         finally:
             cursor.close()
             conn.close()

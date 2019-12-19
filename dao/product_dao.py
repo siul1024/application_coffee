@@ -1,5 +1,7 @@
 import inspect
+
 from mysql.connector import Error
+
 from dao.abs_dao import Dao
 
 insert_sql = "INSERT INTO product VALUES(%s, %s)"
@@ -15,27 +17,29 @@ class ProductDao(Dao):
         args = (code, )
         try:
             super().do_query(query=delete_sql, kargs=args)
-            return True
+            # return True
         except Error:
-            return False
+            raise
 
     def update_table(self, name=None, code=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "product"))
         args = (name, code)
         try:
             super().do_query(query=update_sql, kargs=args)
-            return True
+            # return True
         except Error:
-            return False
+            # return False
+            raise
 
     def insert_table(self, code=None, name=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "product"))
         args = (code, name)
         try:
             super().do_query(query=insert_sql, kargs=args)
-            return True
+            # return True
         except Error:
-            return False
+            raise
+            # return False
 
     def select_table(self, code=None):
         print("\n______ {}:{} ______".format(inspect.stack()[0][3], "product"))
@@ -46,8 +50,8 @@ class ProductDao(Dao):
             res = []
             [res.append(row) for row in self.iter_row(cursor, 5)]
             return res
-        except Error as e:
-            print(e)
+        except Error:
+            raise
         finally:
             cursor.close()
             conn.close()

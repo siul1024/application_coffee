@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
+from mysql.connector import Error
 
 from dao.product_dao import ProductDao
 from ui import abs_ui
@@ -27,25 +28,28 @@ class UiProduct(MyUi):
     def delete_service(self):
         self.ui.le_code.setEnabled(True)
         self.ui.le_name.setEnabled(False)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(self.__delete)
         self.load_data()
 
     def update_service(self):
         self.ui.le_code.setEnabled(True)
         self.ui.le_name.setEnabled(True)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(self.__update)
         self.load_data()
 
     def insert_service(self):
         self.ui.le_code.setEnabled(True)
         self.ui.le_name.setEnabled(True)
-
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(self.__insert)
         self.load_data()
 
     def select_service(self):
         self.ui.le_code.setEnabled(True)
         self.ui.le_name.setEnabled(False)
+        self.ui.btn_apply.disconnect()
         self.ui.btn_apply.clicked.connect(lambda stat, le_code=self.ui.le_code: self.load_data(stat, le_code))
 
     def create_item(self, code, name):
@@ -86,13 +90,23 @@ class UiProduct(MyUi):
         self.table.clearSelection()
 
     def __insert(self):
-        self.TB.insert_table(self.ui.le_code.text(), self.ui.le_name.text())
-        self.load_data()
+        try:
+            self.TB.insert_table(self.ui.le_code.text(), self.ui.le_name.text())
+            self.load_data()
+        except Error:
+            QMessageBox().information(self, 'INSERT ERROR', str(Error), QMessageBox.Ok)
 
     def __update(self):
-        self.TB.update_table(self.ui.le_name.text(), self.ui.le_code.text())
-        self.load_data()
+        try:
+            self.TB.update_table(self.ui.le_name.text(), self.ui.le_code.text())
+            self.load_data()
+        except Error:
+            QMessageBox().information(self, 'UPDATE ERROR', str(Error), QMessageBox.Ok)
 
     def __delete(self):
-        self.TB.delete_table(self.ui.le_code.text())
-        self.load_data()
+        try:
+            self.TB.delete_table(self.ui.le_code.text())
+            self.load_data()
+        except Error:
+            print(Error)
+            QMessageBox().information(self, 'DELETE ERROR', str(Error), QMessageBox.Ok)

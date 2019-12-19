@@ -17,7 +17,6 @@ class UiSaleDetail(MyUi):
         self.ui.btn_default.clicked.connect(self.select_service)
         self.ui.btn_order_sp.clicked.connect(lambda stat, x=True: self.tablejoin_service(stat, order=x))
         self.ui.btn_order_mp.clicked.connect(lambda stat, x=False: self.tablejoin_service(stat, order=x))
-        self.select_service()
 
     def select_service(self):
         self.ui.tbl_widget.setColumnCount(5)
@@ -120,29 +119,29 @@ class UiSaleDetail(MyUi):
 
         i3 = QTableWidgetItem(price)
         i3.setTextAlignment(Qt.AlignRight)
-        i3.setData(Qt.DisplayRole, format(int(price), ',d'))
+        i3.setData(Qt.DisplayRole, format(price, ','))
 
         i4 = QTableWidgetItem(sc)
         i4.setTextAlignment(Qt.AlignRight)
-        i4.setData(Qt.DisplayRole, format(int(sc), ',d'))
+        i4.setData(Qt.DisplayRole, format(sc, ','))
 
         i5 = QTableWidgetItem(supp)
         i5.setTextAlignment(Qt.AlignRight)
-        i5.setData(Qt.DisplayRole, format(int(supp), ',d'))
+        i5.setData(Qt.DisplayRole, format(supp, ','))
 
         i6 = QTableWidgetItem(addtax)
         i6.setTextAlignment(Qt.AlignRight)
-        i6.setData(Qt.DisplayRole, format(int(addtax), ',d'))
+        i6.setData(Qt.DisplayRole, format(addtax, ','))
 
         i7 = QTableWidgetItem(salep)
         i7.setTextAlignment(Qt.AlignRight)
-        i7.setData(Qt.DisplayRole, format(int(salep), ',d'))
+        i7.setData(Qt.DisplayRole, format(salep, ','))
 
         i8 = QTableWidgetItem(mr)
         i8.setTextAlignment(Qt.AlignRight)
-        i8.setData(Qt.DisplayRole, format(int(mr), ',d'))
+        i8.setData(Qt.DisplayRole, format(mr, ','))
 
         i9 = QTableWidgetItem(mp)
         i9.setTextAlignment(Qt.AlignRight)
-        i9.setData(Qt.DisplayRole, format(int(mp), ',d'))
+        i9.setData(Qt.DisplayRole, format(mp, ','))
         return i0, i1, i2, i3, i4, i5, i6, i7, i8, i9
