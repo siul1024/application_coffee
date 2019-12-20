@@ -1,7 +1,8 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
+from dao.abs_dao import SQLError
 from dao.sale_detail_dao import SaleDetailDao
 from ui import abs_ui
 from ui.abs_ui import MyUi
@@ -33,7 +34,7 @@ class UiSaleDetail(MyUi):
                             data=['rank', 'code', 'name', 'price(￦)', 'saleCnt',
                                   'supply_price(￦)', 'addTax(￦)', 'sale_price(￦)', 'marginRate(%)', 'marginPrice(￦)'])
         # 마진액순 mp
-        if order==False:
+        if order == False:
             self.ui.btn_default.setEnabled(True)
             self.ui.btn_order_sp.setEnabled(True)
             self.ui.btn_order_mp.setEnabled(False)
@@ -46,41 +47,47 @@ class UiSaleDetail(MyUi):
             self.load_data2(True)
 
     def load_data(self):
-        res = self.TB.select_table()
-        self.ui.tbl_widget.setRowCount(0)
-        for idx, (no, sale_price, addTax, supply_price, marginPrice) in enumerate(res):
-            item_no, item_sale_price, item_addTax, item_supply_price, item_marginPrice = self.create_item(no, sale_price, addTax, supply_price, marginPrice)
-            nextIdx = self.ui.tbl_widget.rowCount()
-            self.ui.tbl_widget.insertRow(nextIdx)
-            self.ui.tbl_widget.setItem(nextIdx, 0, item_no)
-            self.ui.tbl_widget.setItem(nextIdx, 1, item_sale_price)
-            self.ui.tbl_widget.setItem(nextIdx, 2, item_addTax)
-            self.ui.tbl_widget.setItem(nextIdx, 3, item_supply_price)
-            self.ui.tbl_widget.setItem(nextIdx, 4, item_marginPrice)
+        try:
+            res = self.TB.select_table()
+            self.ui.tbl_widget.setRowCount(0)
+            for idx, (no, sale_price, addTax, supply_price, marginPrice) in enumerate(res):
+                item_no, item_sale_price, item_addTax, item_supply_price, item_marginPrice = self.create_item(no, sale_price, addTax, supply_price, marginPrice)
+                nextIdx = self.ui.tbl_widget.rowCount()
+                self.ui.tbl_widget.insertRow(nextIdx)
+                self.ui.tbl_widget.setItem(nextIdx, 0, item_no)
+                self.ui.tbl_widget.setItem(nextIdx, 1, item_sale_price)
+                self.ui.tbl_widget.setItem(nextIdx, 2, item_addTax)
+                self.ui.tbl_widget.setItem(nextIdx, 3, item_supply_price)
+                self.ui.tbl_widget.setItem(nextIdx, 4, item_marginPrice)
+        except SQLError as e:
+            QMessageBox().information(self, 'SELECT ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def load_data2(self, order):
-        res = self.TB.order_by_select(order)
-        self.ui.tbl_widget.setRowCount(0)
-        for idx, (rank, code, name, price, saleCnt, supply_price, addTax, sale_price, mR, mP)\
-                in enumerate(res):
-            irank, icode, iname, iprice, isc, isupp, iaddtax, isalep, imr, imp = \
-                self.create_item2(rank, code, name, price, saleCnt, supply_price, addTax, sale_price, mR, mP)
-            nextIdx = self.ui.tbl_widget.rowCount()
-            self.ui.tbl_widget.insertRow(nextIdx)
-            self.ui.tbl_widget.setItem(nextIdx, 0, irank)
-            self.ui.tbl_widget.setItem(nextIdx, 1, icode)
-            self.ui.tbl_widget.setItem(nextIdx, 2, iname)
-            self.ui.tbl_widget.setItem(nextIdx, 3, iprice)
-            self.ui.tbl_widget.setItem(nextIdx, 4, isc)
-            self.ui.tbl_widget.setItem(nextIdx, 5, isupp)
-            self.ui.tbl_widget.setItem(nextIdx, 6, iaddtax)
-            self.ui.tbl_widget.setItem(nextIdx, 7, isalep)
-            self.ui.tbl_widget.setItem(nextIdx, 8, imr)
-            self.ui.tbl_widget.setItem(nextIdx, 9, imp)
-            if order == False:
-                self.ui.tbl_widget.item(nextIdx, 9).setBackground(Qt.lightGray)
-            else:
-                self.ui.tbl_widget.item(nextIdx, 5).setBackground(Qt.lightGray)
+        try:
+            res = self.TB.select_order_by(order)
+            self.ui.tbl_widget.setRowCount(0)
+            for idx, (rank, code, name, price, saleCnt, supply_price, addTax, sale_price, mR, mP)\
+                    in enumerate(res):
+                irank, icode, iname, iprice, isc, isupp, iaddtax, isalep, imr, imp = \
+                    self.create_item2(rank, code, name, price, saleCnt, supply_price, addTax, sale_price, mR, mP)
+                nextIdx = self.ui.tbl_widget.rowCount()
+                self.ui.tbl_widget.insertRow(nextIdx)
+                self.ui.tbl_widget.setItem(nextIdx, 0, irank)
+                self.ui.tbl_widget.setItem(nextIdx, 1, icode)
+                self.ui.tbl_widget.setItem(nextIdx, 2, iname)
+                self.ui.tbl_widget.setItem(nextIdx, 3, iprice)
+                self.ui.tbl_widget.setItem(nextIdx, 4, isc)
+                self.ui.tbl_widget.setItem(nextIdx, 5, isupp)
+                self.ui.tbl_widget.setItem(nextIdx, 6, iaddtax)
+                self.ui.tbl_widget.setItem(nextIdx, 7, isalep)
+                self.ui.tbl_widget.setItem(nextIdx, 8, imr)
+                self.ui.tbl_widget.setItem(nextIdx, 9, imp)
+                if order == False:
+                    self.ui.tbl_widget.item(nextIdx, 9).setBackground(Qt.lightGray)
+                else:
+                    self.ui.tbl_widget.item(nextIdx, 5).setBackground(Qt.lightGray)
+        except SQLError as e:
+            QMessageBox().information(self, 'SELECT ERROR', "Error {}".format(e.args[0]), QMessageBox.Ok)
 
     def create_item(self, no, sale_price, addTax, supply_price, marginPrice):
         ino = QTableWidgetItem(no)

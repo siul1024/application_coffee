@@ -20,6 +20,7 @@ class UiMainWindow(QMainWindow):
         self.ui.btn_product.clicked.connect(self.display)
         self.ui.btn_sale.clicked.connect(lambda x: self.display(1))
         self.ui.btn_saledetail.clicked.connect(lambda x: self.display(2))
+        self.ui.btn_product.setEnabled(False)
 
     def display(self, i):
         self.ui.stk_widget.setCurrentIndex(i)
